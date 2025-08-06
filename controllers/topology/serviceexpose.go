@@ -233,6 +233,7 @@ func (r *ServiceExposeReconciler) renderServiceBase(
 		labels[k] = v
 	}
 
+	defaultLoadBalancerClass := "tailscale"
 	return &k8scorev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        name,
@@ -244,7 +245,8 @@ func (r *ServiceExposeReconciler) renderServiceBase(
 			Selector: selectorLabels,
 			// if we ever get here we know expose is not none, so we can just cast the string from
 			// our crd to the appropriate flavor service
-			Type: exposeTypeToServiceType(owningTopology.Spec.Expose.ExposeType),
+			Type:              exposeTypeToServiceType(owningTopology.Spec.Expose.ExposeType),
+			LoadBalancerClass: &defaultLoadBalancerClass,
 		},
 	}
 }

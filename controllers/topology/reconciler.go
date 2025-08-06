@@ -528,9 +528,8 @@ func (r *Reconciler) ReconcileServicesExpose(
 			existingCurrentServiceNodeName,
 		)
 
-		if len(existingCurrentService.Status.LoadBalancer.Ingress) == 1 {
-			// can/would this ever be more than 1? i dunno?
-			address := existingCurrentService.Status.LoadBalancer.Ingress[0].IP
+		for _, ingress := range existingCurrentService.Status.LoadBalancer.Ingress {
+			address := ingress.IP
 			if address != "" {
 				reconcileData.ResolvedExposedPorts[existingCurrentServiceNodeName].LoadBalancerAddress = address //nolint:lll
 			}
